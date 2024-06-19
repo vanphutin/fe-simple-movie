@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import MovieCart from "./MovieCart";
 import "swiper/scss";
+import MovieCart from "./MovieCart";
 import useSWR from "swr";
 import { fetcher } from "../../config";
 
