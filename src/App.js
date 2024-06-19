@@ -1,38 +1,31 @@
-import Banner from "./components/banner/Banner";
-import MovieCart from "./components/movies/MovieCart";
-import MovieList from "./components/movies/MovieList";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Main from "./components/layout/Main";
+import HomePage from "./pages/HomePage";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/scss";
+import Banner from "./components/banner/Banner";
+import MoviePage from "./pages/MoviePage";
+import MovieDetailsPage from "./pages/MovieDetailsPage";
 
 function App() {
   return (
-    <>
-      <header className="header flex items-center justify-center gap-x-5 py-10 text-white mb-5">
-        <span className="active text-primary">Home</span>
-        <span>Movies</span>
-      </header>
-      <Banner />
-      <section className="movies-layout page-container pb-20">
-        <h2 className="capitalize text-white mb-5 text-3xl font-bold ">
-          Now Playing
-        </h2>
-        <MovieList />
-      </section>
-
-      <section className="movies-layout page-container pb-10">
-        <h2 className="capitalize text-white mb-5 text-3xl font-bold ">
-          Top rated
-        </h2>
-        <MovieList type="top_rated" />
-      </section>
-
-      <section className="movies-layout page-container pb-10">
-        <h2 className="capitalize text-white mb-5 text-3xl font-bold ">
-          Trending
-        </h2>
-        <MovieList type="popular" />
-      </section>
-    </>
+    <Router>
+      <Routes>
+        <Route element={<Main />}>
+          <Route
+            path="/"
+            element={
+              <>
+                <Banner />
+                <HomePage />
+              </>
+            }
+          />
+          <Route path="/movies" element={<MoviePage />} />
+          <Route path="/movie/:movieId" element={<MovieDetailsPage />} />
+        </Route>
+      </Routes>
+    </Router>
   );
 }
 
