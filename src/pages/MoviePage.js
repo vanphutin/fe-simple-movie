@@ -7,31 +7,50 @@ import { IoIosSearch } from "react-icons/io";
 import useDebounce from "../hooks/useDebounce";
 import { MdNavigateNext } from "react-icons/md";
 import { GrFormPrevious } from "react-icons/gr";
+import ReactPaginate from "react-paginate";
 
 //
+const totalPage = 5;
+const itemsPerPage = 1000;
 const MoviePage = () => {
+  const [itemOffset, setItemOffset] = useState(0);
+  const [pageCount, setPageCount] = useState(0);
   const [filter, setFilter] = useState("");
+  const [nextPage, setNextPage] = useState(1);
   const filterDebounce = useDebounce(filter, 500);
   const [url, setUrl] = useState(
-    "https://api.themoviedb.org/3/movie/popular?api_key=5870f3c945af319893fa3a4452cc3991"
+    `https://api.themoviedb.org/3/movie/popular?${API_KEY}&page=${nextPage}`
   );
   const { data, error } = useSWR(url, fetcher);
-  const movies = data?.results || [];
+
   const handleFilterChanger = (e) => {
     setFilter(e.target.value);
   };
+
   useEffect(() => {
     if (filterDebounce) {
       setUrl(
-        `https://api.themoviedb.org/3/search/movie?${API_KEY}&query=${filterDebounce}`
+        `https://api.themoviedb.org/3/search/movie?${API_KEY}&query=${filterDebounce}&page=${nextPage}`
       );
     } else {
       setUrl(
-        "https://api.themoviedb.org/3/movie/popular?api_key=5870f3c945af319893fa3a4452cc3991"
+        `https://api.themoviedb.org/3/movie/popular?${API_KEY}&page=${nextPage}`
       );
     }
-  }, [filterDebounce]);
+  }, [filterDebounce, nextPage]);
+
+  const movies = data?.results || [];
   const isLoading = !data && !error;
+  console.log("data >>", data);
+  useEffect(() => {
+    if (!data || !data.total_results) return;
+    setPageCount(Math.ceil(data.total_results / itemsPerPage));
+  }, [data, itemOffset]);
+  const handlePageClick = (event) => {
+    const newOffset = (event.selected * itemsPerPage) % data.total_results;
+    setItemOffset(newOffset);
+    setNextPage(event.selected + 1);
+  };
   return (
     <div className="p-10 page-container">
       <div
@@ -64,15 +83,39 @@ const MoviePage = () => {
             <MovieCart key={index + 1} item={item} />
           ))}
       </div>
-      <div className="flex items-center justify-center mb-10 gap-x-5 pt-5">
-        <span className="cursor-pointer">
+      <div className="mt-10">
+        <ReactPaginate
+          breakLabel="..."
+          nextLabel="next >"
+          onPageChange={handlePageClick}
+          pageRangeDisplayed={5}
+          pageCount={pageCount}
+          previousLabel="< previous"
+          renderOnZeroPageCount={null}
+          className="paginate"
+        />
+      </div>
+      <div className="flex items-center justify-center mb-10 gap-x-5 pt-5 hidden">
+        <span
+          className="cursor-pointer"
+          onClick={() => setNextPage(nextPage - 1)}
+        >
           <GrFormPrevious className="text-3xl" />
         </span>
-        <span className="cursor-pointer leading-none inline-block p-3 bg-white text-slate-900 rounded ">
-          1
-        </span>
+        {new Array(totalPage).fill(0).map((item, index) => (
+          <span
+            className="cursor-pointer leading-none inline-block p-3 bg-white text-slate-900 rounded "
+            key={index + 1}
+            onClick={() => setNextPage(index + 1)}
+          >
+            {index + 1}
+          </span>
+        ))}
 
-        <span className="cursor-pointer">
+        <span
+          className="cursor-pointer"
+          onClick={() => setNextPage(nextPage + 1)}
+        >
           <MdNavigateNext className="text-3xl" />
         </span>
       </div>
