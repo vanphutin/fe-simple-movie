@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Button from "../button/Button";
 
 //5870f3c945af319893fa3a4452cc3991
 // https://api.themoviedb.org/3/movie/now_playing?
@@ -20,12 +21,9 @@ const MovieCart = ({ item }) => {
         <span>{new Date(release_date).getFullYear()}</span>
         <span>{vote_average}</span>
       </div>
-      <button
-        className="py-3 px-6 rounded-lg capitalize bg-primary w-full"
-        onClick={() => navigate(`/movie/${id}`)}
-      >
+      <Button bgColor="secondary" full onClick={() => navigate(`/movie/${id}`)}>
         Watch Now
-      </button>
+      </Button>
     </div>
   );
 };

@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { API_KEY, fetcher } from "../../config";
 import useSWR from "swr";
 import { Swiper, SwiperSlide } from "swiper/react";
+import Button from "../button/Button";
+import { useNavigate } from "react-router-dom";
 
 const Banner = () => {
   const { data, error, isLoading } = useSWR(
@@ -26,7 +28,8 @@ const Banner = () => {
 };
 
 function BannerItems({ item }) {
-  const { title, release_date, vote_average, poster_path } = item;
+  const navigate = useNavigate();
+  const { title, release_date, vote_average, poster_path, id } = item;
 
   return (
     <div className="w-full h-full rounded-lg  relative ">
@@ -49,9 +52,7 @@ function BannerItems({ item }) {
             Adventure
           </span>
         </div>
-        <button className="py-3 px-6 rounded-lg bg-primary text-white font-medium ">
-          Watch Now
-        </button>
+        <Button onClick={() => navigate(`/movie/${id}`)}>Watch Now</Button>
       </div>
     </div>
   );
