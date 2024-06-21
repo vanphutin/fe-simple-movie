@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { fetcher } from "../../config";
+import { API_KEY, fetcher } from "../../config";
 import useSWR from "swr";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 const Banner = () => {
   const { data, error, isLoading } = useSWR(
-    `https://api.themoviedb.org/3/movie/upcoming?api_key=5870f3c945af319893fa3a4452cc3991`,
+    `https://api.themoviedb.org/3/movie/upcoming?${API_KEY}`,
     fetcher
   );
   const movies = data?.results || [];
