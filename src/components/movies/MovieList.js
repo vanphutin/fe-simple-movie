@@ -8,8 +8,7 @@ import { fetcher, tmdbAPI } from "../../config";
 const MovieList = ({ type = "now_playing" }) => {
   const [movies, setMovies] = useState([]);
   const { data, error, isLoading } = useSWR(
-    `${tmdbAPI.getMovieList(type
-    )}`,
+    `${tmdbAPI.getMovieList(type)}`,
     fetcher
   );
   useEffect(() => {
