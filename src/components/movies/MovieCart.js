@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Button from "../button/Button";
-
-//5870f3c945af319893fa3a4452cc3991
-// https://api.themoviedb.org/3/movie/now_playing?
+import { tmdbAPI } from "../../config";
 
 const MovieCart = ({ item }) => {
   const { title, release_date, vote_average, poster_path, id } = item;
@@ -12,7 +10,7 @@ const MovieCart = ({ item }) => {
   return (
     <div className="movie-card rounded-lg p-3 bg-slate-800 h-[470px] select-none">
       <img
-        src={`http://image.tmdb.org/t/p/w500/${poster_path}`}
+        src={`${tmdbAPI.imageOriginal(poster_path)}`}
         alt=""
         className="w-full h-[250px] object-cover rounded-lg mb-5"
       />
